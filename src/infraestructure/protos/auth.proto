@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package auth;
+
+message AuthUser {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  bool email_verify = 4;
+  repeated string roles = 5;
+  repeated string permissions = 6;
+}
+
+message LoginDTO {
+    string email = 1;
+    string password = 2;
+}
+
+message LoginRequest {
+    LoginDTO body = 1;
+}
+
+message LoginResponse {
+    string access_token = 1;
+}
+
+message RegisterDTO {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message RegisterRequest {
+    RegisterDTO body = 1;
+}
+
+message RegisterResponse {
+
+}
+
+message LoginOrRegisterWithOAuthDTO {
+    string token = 1;
+}
+
+message LoginOrRegisterWithOAuthRequest {
+   LoginOrRegisterWithOAuthDTO body = 1;
+}
+
+message LoginOrRegisterWithOAuthResponse {
+    string access_token = 1;
+}
+
+message ForgotPasswordDTO {
+    string email = 1;
+}
+
+message ForgotPasswordRequest {
+    ForgotPasswordDTO body = 1;
+}
+
+message ForgotPasswordResponse {
+
+}
+
+message ResetPasswordDTO {
+    string email = 1;
+    string token = 2;
+    string new_password = 3;
+}
+
+message ResetPasswordRequest {
+  ResetPasswordDTO body = 1;
+}
+
+message ResetPasswordResponse {
+
+}
+
+message RequestConfirmEmailDTO {
+    string email = 1;
+}
+
+message RequestConfirmEmailRequest {
+    RequestConfirmEmailDTO user = 1;
+}
+
+message RequestConfirmEmailResponse {
+
+}
+
+message ConfirmEmailDTO {
+   string email = 1;
+   string token = 2; 
+}
+
+message ConfirmEmailRequest {
+   ConfirmEmailDTO body = 1; 
+}
+
+message ConfirmEmailResponse {
+
+}
+
+message VerifyAccessTokenDTO {
+    string access_token = 1;
+}
+
+message VerifyAccessTokenRequest {
+   VerifyAccessTokenDTO body = 1; 
+   optional AuthUser user = 2;
+}
+
+
+service AuthService {
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    rpc LoginOrRegisterWithOAuth(LoginOrRegisterWithOAuthRequest) returns (LoginOrRegisterWithOAuthResponse);
+    rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse);
+    rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+    rpc RequestConfirmEmail(RequestConfirmEmailRequest) returns (RequestConfirmEmailResponse);
+    rpc ConfirmEmail(ConfirmEmailRequest) returns (ConfirmEmailResponse);
+    rpc VerifyAccessToken(VerifyAccessTokenRequest) returns (AuthUser);
+}

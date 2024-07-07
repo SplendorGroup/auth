@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id             String   @id @default(uuid()) @map("_id")
+  name           String
+  email          String   @unique
+  email_verify   Boolean  @default(false)
+  password       String
+  active         Boolean  @default(true)
+  created_at     DateTime @default(now()) @map("created_at")
+  updated_at     DateTime @updatedAt @map("updated_at")
+  user_roles     user_role[]
+  codes          code[]
+}
+
+model role {
+  id             String   @id @default(uuid()) @map("_id")
+  name           String   @unique
+  label          String
+  description    String?
+  created_at     DateTime @default(now()) @map("created_at")
+  updated_at     DateTime @updatedAt @map("updated_at")
+  user_roles     user_role[]
+  role_permissions role_permission[]
+}
+
+model user_role {
+  id             String   @id @default(uuid()) @map("_id")
+  user_id        String   @map("user_id")
+  role_id        String   @map("role_id")
+  created_at     DateTime @default(now()) @map("created_at")
+  updated_at     DateTime @updatedAt @map("updated_at")
+  user           user     @relation(fields: [user_id], references: [id])
+  role           role     @relation(fields: [role_id], references: [id])
+}
+
+model permission {
+  id             String   @id @default(uuid()) @map("_id")
+  name           String   @unique
+  label          String
+  description    String?
+  created_at     DateTime @default(now()) @map("created_at")
+  updated_at     DateTime @updatedAt @map("updated_at")
+  role_permissions role_permission[]
+}
+
+model role_permission {
+  id             String   @id @default(uuid()) @map("_id")
+  role_id        String   @map("role_id")
+  permission_id  String   @map("permission_id")
+  created_at     DateTime @default(now()) @map("created_at")
+  updated_at     DateTime @updatedAt @map("updated_at")
+  role           role     @relation(fields: [role_id], references: [id])
+  permission     permission @relation(fields: [permission_id], references: [id])
+}
+
+model code {
+  id             String   @id @default(uuid()) @map("_id")
+  user_id        String
+  code           String
+  used           Boolean  @default(false)
+  created_at     DateTime @default(now()) @map("created_at")
+  updated_at     DateTime @updatedAt @map("updated_at")
+  user           user     @relation(fields: [user_id], references: [id])
+}
