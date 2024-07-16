@@ -1,7 +1,8 @@
-import { VerifyAccessTokenDTO } from "@/application/dtos/auth/verify-acess-token";
-import { IJwt } from "@/domain/interfaces/ijwt";
-import { Auth } from "@/domain/types/auth";
-import { Inject, Injectable } from "@nestjs/common";
+import { VerifyAccessTokenDTO } from '@/application/dtos/auth/verify-acess-token';
+import { IJwt } from '@/domain/interfaces/ijwt';
+import { Auth } from '@/domain/types/auth';
+import { Inject, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class VerifyAcessTokenUseCase {
@@ -11,7 +12,19 @@ export class VerifyAcessTokenUseCase {
   ) {}
 
   async execute({ access_token }: VerifyAccessTokenDTO) {
-    return this.verifyJwtManagerService(access_token);
+    try {
+      return this.verifyJwtManagerService(access_token);
+    } catch {
+      throw new RpcException({
+        code: 1008,
+        details: JSON.stringify({
+          name: 'Access Token Expired',
+          identify: 'AUTH_ACCESS_TOKEN_EXPIRED',
+          status: 401,
+          message: 'The access token is expired.',
+        }),
+      });
+    }
   }
 
   verifyJwtManagerService(access_token: string) {

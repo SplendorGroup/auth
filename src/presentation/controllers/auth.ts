@@ -109,7 +109,7 @@ export class AuthController {
     return await this.confirmEmailUseCase.execute(body);
   }
 
-  @GrpcMethod('AuthService', 'ConfirmEmail')
+  @GrpcMethod('AuthService', 'VerifyAccessToken')
   @ValidateGrpcInput(
     { body: VerifyAccessTokenDTO },
     {

@@ -4,20 +4,26 @@ import { UserService } from '@/application/services/user';
 import { UserRoleService } from '@/application/services/user-role';
 import { Role, User } from '@/domain/entities';
 import { UserFactory, UserRoleFactory } from '@/domain/factories';
+import { IRecaptcha } from '@/domain/interfaces/irecaptcha';
 import { hashEncrypt } from '@/infraestructure/helpers/hash';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class RegisterUseCase {
+  protected enviromnet = process.env.NODE_ENV;
   constructor(
     private readonly userService: UserService,
     private readonly userFactory: UserFactory,
     private readonly userRoleService: UserRoleService,
     private readonly userRoleFactory: UserRoleFactory,
     private readonly roleService: RoleService,
+    @Inject("RECAPTCHA")
+    private readonly recaptchaProvider: IRecaptcha,
   ) {}
 
   async execute(data: RegisterDTO) {
+    await this.checkRecaptchaToken(data?.recaptcha_token);
     const user = await this.getUser(data.email)
 
     this.checkIfUserAlreadyExists(user)
@@ -33,13 +39,27 @@ export class RegisterUseCase {
     return { message: "Registered with success!" }
   }
 
+  async checkRecaptchaToken(recaptcha_token: string) {
+    if (this.enviromnet === "production") {
+      await this.recaptchaProvider.verify(recaptcha_token);
+    }
+  }
+
   async getUser(email: string) {
     return await this.userService.findOne({ email });
   }
 
   checkIfUserAlreadyExists(user: Partial<User>) {
     if (user) {
-      throw new Error();
+      throw new RpcException({
+        code: 1201,
+        details: JSON.stringify({
+          name: 'User Already Exists',
+          identify: 'USER_ALTREADY_EXISTS',
+          status: 409,
+          message: 'The user already exists.',
+        }),
+      });
     }
   }
 
@@ -62,7 +82,15 @@ export class RegisterUseCase {
 
   checkIfDefaultRoleFound(role: Partial<Role>) {
     if (!role) {
-      throw new Error()
+      throw new RpcException({
+        code: 1300,
+        details: JSON.stringify({
+          name: 'Role Not Found',
+          identify: 'Role_NOT_FOUND',
+          status: 404,
+          message: 'The specified role could not be found.',
+        }),
+      });
     }
   }
 

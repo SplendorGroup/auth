@@ -5,6 +5,7 @@ import { UserService } from '@/application/services/user';
 import { UserRoleService } from '@/application/services/user-role';
 import { UserRoleFactory } from '@/domain/factories';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 
 
 @Injectable()
@@ -44,7 +45,15 @@ export class SyncRoleWithUserUseCase {
 
   validateUser(user: any) {
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado!');
+      throw new RpcException({
+        code: 1200,
+        details: JSON.stringify({
+          name: 'User Not Found',
+          identify: 'USER_NOT_FOUND',
+          status: 404,
+          message: 'The specified user could not be found.',
+        }),
+      });
     }
   }
 
@@ -54,7 +63,15 @@ export class SyncRoleWithUserUseCase {
 
   validateRole(role: any) {
     if (!role) {
-      throw new NotFoundException('Função não encontrada!');
+      throw new RpcException({
+        code: 1300,
+        details: JSON.stringify({
+          name: 'Role Not Found',
+          identify: 'ROLE_NOT_FOUND',
+          status: 404,
+          message: 'The specified role could not be found.',
+        }),
+      });
     }
   }
 

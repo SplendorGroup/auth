@@ -27,7 +27,7 @@ export class CreateRoleUseCase {
       return await this.roleService.create(role) as Role;
     } catch {
       throw new RpcException({
-        code: 1202,
+        code: 1302,
         details: JSON.stringify({
           name: 'Role Creation Failed',
           identify: 'ROLE_CREATION_FAILED',
@@ -45,7 +45,7 @@ export class CreateRoleUseCase {
   checkIfTheRoleExists(role: Partial<Role>) {
     if (role) {
       throw new RpcException({
-        code: 1201,
+        code: 1301,
         details: JSON.stringify({
           name: 'Role Already Exists',
           identify: 'ROLE_ALREADY_EXISTS',

@@ -4,15 +4,17 @@ import { UserRoleMapper } from '../mappers/user_role';
 
 @Injectable()
 export class UserRoleFactory {
-  create(data: any): UserRole {
-    const userDomain = UserRoleMapper.toDomain(data);
-    return new UserRole(userDomain);
+  create(data: any) {
+    const user_domain = UserRoleMapper.toDomain(data);
+    const user = new UserRole(user_domain);
+    return UserRoleMapper.toPersistence(user)
   }
 
   update(id: string, data: any) {
     const userDomain = UserRoleMapper.toDomain({ id, ...data });
-    return new UserRole(userDomain, {
+    const user_role = new UserRole(userDomain, {
       update: true,
     });
+    return UserRoleMapper.toPersistence(user_role)
   }
 }

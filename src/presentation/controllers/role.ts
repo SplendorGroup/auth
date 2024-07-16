@@ -114,7 +114,7 @@ export class RoleController {
 
   @GrpcMethod('RoleService', 'SyncPermissions')
   @ValidateGrpcInput(
-    { params: CreateRoleDTO },
+    { params: SyncPermissionsWithRoleDTO },
     {
       code: 1205,
       identify: 'ROLE_UNPROCESSABLE_CONTENT',
@@ -130,7 +130,7 @@ export class RoleController {
 
   @GrpcMethod('RoleService', 'GetPermissions')
   @ValidateGrpcInput(
-    { params: CreateRoleDTO },
+    { params: GetPermissionsDTO },
     {
       code: 1205,
       identify: 'ROLE_UNPROCESSABLE_CONTENT',

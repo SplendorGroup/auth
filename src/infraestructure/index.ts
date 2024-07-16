@@ -7,6 +7,8 @@ import { JwtManagerService } from "./services/jwt-manager-service";
 import { JwtService } from "@nestjs/jwt";
 import { GoogleOAuth2Provider } from "./providers/google-oauth2";
 import { GoogleRecaptchaProvider } from "./providers/google-recaptcha";
+import { NotificationProvider } from "./providers/notification";
+import { ClientProvider } from "./providers/client";
 
 @Global()
 @Module({
@@ -33,6 +35,14 @@ import { GoogleRecaptchaProvider } from "./providers/google-recaptcha";
       provide: 'RECAPTCHA',
       useClass: GoogleRecaptchaProvider,
     },
+    {
+      provide: 'NOTIFICATION',
+      useClass: NotificationProvider,
+    },
+    {
+      provide: 'CLIENT',
+      useClass: ClientProvider,
+    },
   ],
   exports: [
     MongodbConnection,
@@ -56,6 +66,14 @@ import { GoogleRecaptchaProvider } from "./providers/google-recaptcha";
     {
       provide: 'RECAPTCHA',
       useClass: GoogleRecaptchaProvider,
+    },
+    {
+      provide: 'NOTIFICATION',
+      useClass: NotificationProvider,
+    },
+    {
+      provide: 'CLIENT',
+      useClass: ClientProvider,
     },
   ],
 })

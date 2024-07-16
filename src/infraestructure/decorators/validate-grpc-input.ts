@@ -56,6 +56,8 @@ async function validateRequestData(
   ].map(async ({ key, dto }: { key: string; dto: any }) => {
     if (!dto) return Promise.resolve();
 
+    console.log(dto, request)
+
     const instance = plainToInstance(dto, request[key]) as object;
     if (!(instance instanceof dto)) {
       throw new RpcException({

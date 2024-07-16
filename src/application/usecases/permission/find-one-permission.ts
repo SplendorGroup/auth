@@ -23,7 +23,7 @@ export class FindOnePermissionUseCase {
   checkIfThePermissionIsFound(permission: Partial<Permission>) {
     if (!permission) {
       throw new RpcException({
-        code: 1300,
+        code: 1400,
         details: JSON.stringify({
           name: 'Permission Not Found',
           identify: 'PERMISSION_NOT_FOUND',

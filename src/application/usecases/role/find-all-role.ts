@@ -66,8 +66,6 @@ export class FindAllRoleUseCase {
     return {
       ...data?.filter,
       ...pagination,
-      active: true,
-      deleted: false,
     };
   }
 
@@ -84,8 +82,6 @@ export class FindAllRoleUseCase {
   async countAllroles(data: Omit<Data.Filter<Partial<Role>>, 'user'>) {
     return await this.roleService.count({
       ...data?.filter,
-      active: true,
-      deleted: false,
     });
   }
 

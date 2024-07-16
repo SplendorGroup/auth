@@ -21,7 +21,7 @@ export class DeletePermissionUseCase {
   checkIfThePermissionIsFound(permission: Partial<Permission>) {
     if (!permission) {
       throw new RpcException({
-        code: 1300,
+        code: 1400,
         details: JSON.stringify({
           name: 'Permission Not Found',
           identify: 'PERMISSION_NOT_FOUND',
@@ -37,7 +37,7 @@ export class DeletePermissionUseCase {
       return await this.permissionService.delete(id);
     } catch {
       throw new RpcException({
-        code: 1304,
+        code: 1404,
         details: JSON.stringify({
           name: 'Permission Deletion Failed',
           identify: 'PERMISSION_DELETION_FAILED',

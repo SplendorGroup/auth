@@ -27,10 +27,10 @@ export class UpdateRoleUseCase {
   checkIfTheRoleIsFound(role: Partial<Role>) {
     if (!role) {
       throw new RpcException({
-        code: 1400,
+        code: 1300,
         details: JSON.stringify({
           name: 'Role Not Found',
-          identify: 'BRAND_NOT_FOUND',
+          identify: 'ROLE_NOT_FOUND',
           status: 404,
           message: 'The specified role could not be found.',
         }),
@@ -44,10 +44,10 @@ export class UpdateRoleUseCase {
       return await this.roleService.update(id, role) as Role;
     } catch {
       throw new RpcException({
-        code: 1203,
+        code: 1303,
         details: JSON.stringify({
           name: 'Role Update Failed',
-          identify: 'BRAND_UPDATE_FAILED',
+          identify: 'ROLE_UPDATE_FAILED',
           status: 500,
           message: 'Failed to update role.',
         }),

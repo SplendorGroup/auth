@@ -96,7 +96,7 @@ export class UserController {
 
   @GrpcMethod('UserService', 'Delete')
   @ValidateGrpcInput(
-    { params: CreateUserDTO },
+    { params: DeleteUserDTO },
     {
       code: 1105,
       identify: 'USER_UNPROCESSABLE_CONTENT',
@@ -109,6 +109,7 @@ export class UserController {
     params: DeleteUserDTO;
     user: Auth.Request;
   }) {
+    console.log(id)
     return await this.deleteUserUseCase.execute({ id });
   }
 

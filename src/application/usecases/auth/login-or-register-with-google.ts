@@ -9,6 +9,7 @@ import { hashEncrypt } from '@/infraestructure/helpers/hash';
 import { Role, User } from '@/domain/entities';
 import { UserMapper } from '@/domain/mappers';
 import { IJwt } from '@/domain/interfaces/ijwt';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class LoginOrRegisterWithGoogleUseCase {
@@ -80,7 +81,15 @@ export class LoginOrRegisterWithGoogleUseCase {
 
   checkIfDefaultRoleFound(role: Partial<Role>) {
     if (!role) {
-      throw new Error();
+      throw new RpcException({
+        code: 1300,
+        details: JSON.stringify({
+          name: 'Role Not Found',
+          identify: 'ROLE_NOT_FOUND',
+          status: 404,
+          message: 'The specified role could not be found.',
+        }),
+      });
     }
   }
 

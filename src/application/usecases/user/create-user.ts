@@ -29,7 +29,6 @@ export class CreateUserUseCase {
     await this.syncUserWithDefaultRole(new_user.id, default_role.id);
     return this.transformResponse(new_user);
   }
-
   async getUserByEmail(email: string) {
     return await this.userService.findOne({ email });
   }
@@ -37,7 +36,7 @@ export class CreateUserUseCase {
   checkIfTheUserExists(user: Partial<User>) {
     if (user) {
       throw new RpcException({
-        code: 1101,
+        code: 1201,
         details: JSON.stringify({
           name: 'User Already Exists',
           identify: 'USER_ALREADY_EXISTS',
@@ -62,7 +61,15 @@ export class CreateUserUseCase {
 
   checkIfDefaultRoleFound(role: Partial<Role>) {
     if (!role) {
-      throw new Error();
+      throw new RpcException({
+        code: 1200,
+        details: JSON.stringify({
+          name: 'User Not Found',
+          identify: 'USER_NOT_FOUND',
+          status: 404,
+          message: 'The specified user could not be found.',
+        }),
+      });
     }
   }
 

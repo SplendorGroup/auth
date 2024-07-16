@@ -21,7 +21,7 @@ export class DeleteRoleUseCase {
   checkIfTheRoleIsFound(role: Partial<Role>) {
     if (!role) {
       throw new RpcException({
-        code: 1200,
+        code: 1300,
         details: JSON.stringify({
           name: 'Role Not Found',
           identify: 'ROLE_NOT_FOUND',
@@ -37,7 +37,7 @@ export class DeleteRoleUseCase {
       return await this.roleService.delete(id);
     } catch {
       throw new RpcException({
-        code: 1204,
+        code: 1304,
         details: JSON.stringify({
           name: 'Role Deletion Failed',
           identify: 'ROLE_DELETION_FAILED',

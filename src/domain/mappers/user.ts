@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Role, User } from '../entities';
 import { DateValuesObject } from '../values-object/date';
 import { RoleMapper } from './role';
@@ -23,16 +24,33 @@ export class UserMapper {
       active: raw?.active,
       password: raw?.password,
       created_at: raw?.created_at
-        ? new DateValuesObject(raw.created_at).toDate()
+        ? new DateValuesObject(raw?.created_at).toDate()
         : undefined,
-      updated_at: raw.updated_at
-        ? new DateValuesObject(raw.updated_at).toDate()
+      updated_at: raw?.updated_at
+        ? new DateValuesObject(raw?.updated_at).toDate()
         : undefined,
-      user_roles: raw.user_roles
-        ? raw.user_roles.map(UserRoleMapper.toDomain)
+      user_roles: raw?.user_roles
+        ? raw?.user_roles.map(UserRoleMapper.toDomain)
         : [],
-      codes: raw.codes,
+      codes: raw?.codes,
     });
+  }
+
+  static toPersistence(user: User) {
+    return {
+      id: user?.id,
+      name: user?.name,
+      email: user?.email,
+      email_verify: user?.email_verify,
+      active: user?.active,
+      password: user?.password,
+      created_at: user?.created_at
+        ? new DateValuesObject(user.created_at).toDate()
+        : undefined,
+      updated_at: user?.updated_at
+        ? new DateValuesObject(user.updated_at).toDate()
+        : undefined,
+    };
   }
 
   static toResponse(user: User): UserResponse {
@@ -64,7 +82,7 @@ export class UserMapper {
         ? new DateValuesObject(user?.updated_at).toISOString()
         : null,
       roles: UserMapper.fromRolesNames(user) || [],
-      permissions: UserMapper.fromPermissionsNames(user) || []
+      permissions: UserMapper.fromPermissionsNames(user) || [],
     };
   }
 

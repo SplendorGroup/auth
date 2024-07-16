@@ -20,7 +20,7 @@ export class PermissionService {
     return await this.permission.findOne(permission);
   }
 
-  async create(permission: Permission): Promise<Partial<Permission>> {
+  async create(permission: Partial<Permission>): Promise<Partial<Permission>> {
     return await this.permission.create(permission);
   }
 

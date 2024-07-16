@@ -30,7 +30,7 @@ export class UpdateUserUseCase {
   checkIfTheUserIsFound(user: Partial<User>) {
     if (!user) {
       throw new RpcException({
-        code: 1400,
+        code: 1200,
         details: JSON.stringify({
           name: 'User Not Found',
           identify: 'USER_NOT_FOUND',

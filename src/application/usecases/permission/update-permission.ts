@@ -30,7 +30,7 @@ export class UpdatePermissionUseCase {
   checkIfThePermissionIsFound(permission: Partial<Permission>) {
     if (!permission) {
       throw new RpcException({
-        code: 1300,
+        code: 1400,
         details: JSON.stringify({
           name: 'Permission Not Found',
           identify: 'PERMISSION_NOT_FOUND',
@@ -47,7 +47,7 @@ export class UpdatePermissionUseCase {
       return (await this.permissionService.update(id, permission)) as Permission;
     } catch {
       throw new RpcException({
-        code: 1303,
+        code: 1403,
         details: JSON.stringify({
           name: 'Permission Update Failed',
           identify: 'PERMISSION_UPDATE_FAILED',

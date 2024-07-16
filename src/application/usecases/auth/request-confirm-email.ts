@@ -6,6 +6,7 @@ import { CodeFactory } from '@/domain/factories/code';
 import { Auth } from '@/domain/types/auth';
 import { generateOpacToken } from '@/infraestructure/helpers/generate-code';
 import { Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class RequestConfirmEmailUseCase {
@@ -27,7 +28,15 @@ export class RequestConfirmEmailUseCase {
 
   checkIfUserFound(user: Partial<User>) {
     if (!user) {
-      throw new Error();
+      throw new RpcException({
+        code: 1200,
+        details: JSON.stringify({
+          name: 'User Not Found',
+          identify: 'USER_NOT_FOUND',
+          status: 404,
+          message: 'The specified user could not be found.',
+        }),
+      });
     }
   }
 

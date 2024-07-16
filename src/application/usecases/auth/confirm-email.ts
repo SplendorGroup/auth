@@ -6,6 +6,7 @@ import { UserFactory } from "@/domain/factories";
 import { CodeFactory } from "@/domain/factories/code";
 import { dateIsExpired } from "@/infraestructure/helpers/date";
 import { Injectable } from "@nestjs/common";
+import { RpcException } from "@nestjs/microservices";
 
 @Injectable()
 export class ConfirmEmailUseCase {
@@ -34,7 +35,15 @@ export class ConfirmEmailUseCase {
 
   checkIfUserFound(user: Partial<User>) {
     if (!user) {
-      throw new Error();
+      throw new RpcException({
+        code: 1200,
+        details: JSON.stringify({
+          name: 'User Not Found',
+          identify: 'USER_NOT_FOUND',
+          status: 404,
+          message: 'The user could not be found.',
+        }),
+      });
     }
   }
 
@@ -48,16 +57,30 @@ export class ConfirmEmailUseCase {
 
   checkIfTokenExists(code: Partial<Code>) {
     if (!code) {
-      {
-        throw new Error();
-      }
+      throw new RpcException({
+        code: 1150,
+        details: JSON.stringify({
+          name: 'Token Not Found',
+          identify: 'TOKEN_NOT_FOUND',
+          status: 404,
+          message: 'The token could not be found.',
+        }),
+      });
     }
   }
 
   checkTokenIsExpired(code: Partial<Code>) {
     const token_is_expired = dateIsExpired(code.created_at, 2, 'hours');
     if (token_is_expired === true) {
-      throw new Error();
+      throw new RpcException({
+        code: 1158,
+        details: JSON.stringify({
+          name: 'Token Expired',
+          identify: 'TOKEN_EXPIRED',
+          status: 409,
+          message: 'The token is expired',
+        }),
+      });
     }
   }
 

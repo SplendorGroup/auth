@@ -15,17 +15,17 @@ export interface PermissionResponse {
 export class PermissionMapper {
   static toDomain(raw: any): Permission {
     return new Permission({
-      id: raw.id,
-      name: raw.name,
-      description: raw.description,
-      created_at: raw.created_at
-        ? new DateValuesObject(raw.created_at).toDate()
+      id: raw?.id,
+      name: raw?.name,
+      description: raw?.description,
+      created_at: raw?.created_at
+        ? new DateValuesObject(raw?.created_at).toDate()
         : undefined,
-      updated_at: raw.updated_at
-        ? new DateValuesObject(raw.updated_at).toDate()
+      updated_at: raw?.updated_at
+        ? new DateValuesObject(raw?.updated_at).toDate()
         : undefined,
-      role_permissions: raw.role_permissions
-        ? raw.role_permissions.map(RolePermissionMapper.toDomain)
+      role_permissions: raw?.role_permissions
+        ? raw?.role_permissions.map(RolePermissionMapper.toDomain)
         : [],
     });
   }
@@ -40,6 +40,14 @@ export class PermissionMapper {
       role_permissions: permission.role_permissions
         ? permission.role_permissions.map(RolePermissionMapper.toResponse)
         : [],
+    };
+  }
+
+  static toPersistence(permission: Permission) {
+    return {
+      id: permission.id,
+      name: permission.name,
+      description: permission.description,
     };
   }
 }

@@ -26,7 +26,7 @@ export class UserService {
     )) as unknown as User;
   }
 
-  async create(user: User): Promise<Partial<User>> {
+  async create(user: Partial<User>): Promise<Partial<User>> {
     return await this.user.create(user);
   }
 

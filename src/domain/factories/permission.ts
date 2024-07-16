@@ -4,15 +4,17 @@ import { PermissionMapper } from '../mappers/permission';
 
 @Injectable()
 export class PermissionFactory {
-  create(data: any): Permission {
+  create(data: any) {
     const permissionDomain = PermissionMapper.toDomain(data);
-    return permissionDomain;
+    const permission = new Permission(permissionDomain);
+    return PermissionMapper.toPersistence(permission);
   }
 
-  update(id: string, data: any): Permission {
+  update(id: string, data: any) {
     const permissionDomain = PermissionMapper.toDomain({ id, ...data });
-    return new Permission(permissionDomain, {
+    const permission = new Permission(permissionDomain, {
       update: true,
     });
+    return PermissionMapper.toPersistence(permission); 
   }
 }

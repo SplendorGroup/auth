@@ -1,6 +1,7 @@
 import { FindAllUserDTO } from '@/application/dtos/user/find-all-user';
 import { UserService } from '@/application/services/user';
 import { User } from '@/domain/entities';
+import { UserMapper } from '@/domain/mappers';
 import { Injectable } from '@nestjs/common';
 
 type Data = {
@@ -87,8 +88,8 @@ export class FindAllUserUseCase {
     return await this.userService.count(filter);
   }
 
-  countPages(total_brands: number, per_page: number) {
-    return Math.floor(total_brands / per_page);
+  countPages(total_users: number, per_page: number) {
+    return Math.floor(total_users / per_page);
   }
 
   findAllUsersToResponse(data: Filter.Pagination<User>) {
@@ -105,14 +106,7 @@ export class FindAllUserUseCase {
   filterUser(data: User[]) {
     try {
       return data.flatMap((user: User) => {
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          email_verify: user.email_verify,
-          created_at: user.created_at,
-          updated_at: user.updated_at,
-        };
+        return UserMapper.toResponse(user);
       });
     } catch (error) {
       return [];

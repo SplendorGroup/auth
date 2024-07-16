@@ -19,7 +19,7 @@ export class CodeService {
     return await this.code.findOne(code);
   }
 
-  async create(code: Code): Promise<Partial<Code>> {
+  async create(code: Partial<Code>): Promise<Partial<Code>> {
     return await this.code.create(code);
   }
 

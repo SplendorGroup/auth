@@ -14,6 +14,7 @@ message AuthUser {
 message LoginDTO {
     string email = 1;
     string password = 2;
+    optional string recaptcha_token = 3;
 }
 
 message LoginRequest {
@@ -28,6 +29,7 @@ message RegisterDTO {
     string name = 1;
     string email = 2;
     string password = 3;
+    optional string recaptcha_token = 4;
 }
 
 message RegisterRequest {
@@ -52,6 +54,7 @@ message LoginOrRegisterWithOAuthResponse {
 
 message ForgotPasswordDTO {
     string email = 1;
+    optional string recaptcha_token = 2;
 }
 
 message ForgotPasswordRequest {

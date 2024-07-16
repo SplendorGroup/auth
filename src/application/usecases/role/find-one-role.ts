@@ -23,7 +23,7 @@ export class FindOneRoleUseCase {
   checkIfTheRoleIsFound(role: Partial<Role>) {
     if (!role) {
       throw new RpcException({
-        code: 1200,
+        code: 1300,
         details: JSON.stringify({
           name: 'Role Not Found',
           identify: 'ROLE_NOT_FOUND',

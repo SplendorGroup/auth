@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 import { IsStrongPassword } from 'class-validator';
 
 export class RegisterDTO {
@@ -21,4 +21,8 @@ export class RegisterDTO {
     minSymbols: 1,
   })
   password: string;
+
+  @IsString()
+  @IsOptional()
+  recaptcha_token?: string;
 }

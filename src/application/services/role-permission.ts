@@ -20,7 +20,7 @@ export class RolePermissionService {
     return await this.role_permission.findOne(role_permission);
   }
 
-  async create(role_permission: RolePermission): Promise<Partial<RolePermission>> {
+  async create(role_permission: Partial<RolePermission>): Promise<Partial<RolePermission>> {
     return await this.role_permission.create(role_permission);
   }
 

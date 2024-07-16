@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Role } from '../entities';
 import { DateValuesObject } from '../values-object/date';
 import { RolePermissionMapper, RolePermissionResponse } from './role_permission';
@@ -16,20 +17,20 @@ export interface RoleResponse {
 export class RoleMapper {
   static toDomain(raw: any): Role {
     return new Role({
-      id: raw.id,
-      name: raw.name,
-      description: raw.description,
-      created_at: raw.created_at
-        ? new DateValuesObject(raw.created_at).toDate()
+      id: raw?.id,
+      name: raw?.name,
+      description: raw?.description,
+      created_at: raw?.created_at
+        ? new DateValuesObject(raw?.created_at).toDate()
         : undefined,
-      updated_at: raw.updated_at
-        ? new DateValuesObject(raw.updated_at).toDate()
+      updated_at: raw?.updated_at
+        ? new DateValuesObject(raw?.updated_at).toDate()
         : undefined,
-      user_roles: raw.user_roles
-        ? raw.user_roles.map(UserRoleMapper.toDomain)
+      user_roles: raw?.user_roles
+        ? raw?.user_roles.map(UserRoleMapper.toDomain)
         : [],
-      role_permissions: raw.role_permissions
-        ? raw.role_permissions.map(RolePermissionMapper.toDomain)
+      role_permissions: raw?.role_permissions
+        ? raw?.role_permissions.map(RolePermissionMapper.toDomain)
         : [],
     });
   }
@@ -40,13 +41,21 @@ export class RoleMapper {
       name: role.name,
       description: role.description,
       created_at: new DateValuesObject(role.created_at).toISOString(),
-      updated_at: new DateValuesObject(role.updated_at).toISOString(),
-      user_roles: role.user_roles
+      updated_at: role?.updated_at ? new DateValuesObject(role.updated_at).toISOString() : undefined,
+      user_roles: role?.user_roles
         ? role.user_roles.map(UserRoleMapper.toResponse)
         : [],
-      role_permissions: role.role_permissions
+      role_permissions: role?.role_permissions
         ? role.role_permissions.map(RolePermissionMapper.toResponse)
         : [],
+    };
+  }
+
+  static toPersistence(role: Role) {
+    return {
+      id: role?.id,
+      name: role.name,
+      description: role.description,
     };
   }
 

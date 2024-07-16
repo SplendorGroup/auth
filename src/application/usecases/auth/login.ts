@@ -5,16 +5,22 @@ import { hashCompare } from '@/infraestructure/helpers/hash';
 import { UserMapper } from '@/domain/mappers';
 import { User } from '@/domain/entities';
 import { IJwt } from '@/domain/interfaces/ijwt';
+import { RpcException } from '@nestjs/microservices';
+import { IRecaptcha } from '@/domain/interfaces/irecaptcha';
 
 @Injectable()
 export class LoginUseCase {
+  protected enviromnet = process.env.NODE_ENV;
   constructor(
     private readonly userService: UserService,
     @Inject('JWT')
-    private readonly jwtManagerService: IJwt
+    private readonly jwtManagerService: IJwt,
+    @Inject("RECAPTCHA")
+    private readonly recaptchaProvider: IRecaptcha,
   ) {}
 
   async execute(data: LoginDTO) {
+    await this.checkRecaptchaToken(data?.recaptcha_token);
     const user = await this.getUserCompleted(data.email);
     this.checkIfUserFound(user);
     const is_password_valid = this.checkIsValidPassword(
@@ -32,13 +38,28 @@ export class LoginUseCase {
     }
   }
 
+  async checkRecaptchaToken(recaptcha_token: string) {
+    if (this.enviromnet === "production") {
+      await this.recaptchaProvider.verify(recaptcha_token);
+    }
+  }
+
+
   async getUserCompleted(email: string) {
     return await this.userService.findOneCompleted({ email }) as User;
   }
 
   checkIfUserFound(user: Partial<User>) {
     if (!user) {
-      throw new Error();
+      throw new RpcException({
+        code: 1200,
+        details: JSON.stringify({
+          name: 'User Not Found',
+          identify: 'USER_NOT_FOUND',
+          status: 404,
+          message: 'The specified user could not be found.',
+        }),
+      });
     }
   }
 
@@ -73,6 +94,7 @@ export class LoginUseCase {
 
   createPayload(user: User, roles: string[], permissions: string[]) {
     return {
+      id: user.id,
       name: user.name,
       email: user.email,
       roles,

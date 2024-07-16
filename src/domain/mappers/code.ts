@@ -36,4 +36,13 @@ export class CodeMapper {
       user: UserMapper.toResponse(code.user),
     };
   }
+
+  static toPersistence(code: Code) {
+    return {
+      id: code.id,
+      user_id: code.user_id,
+      code: code.code,
+      used: code.used,
+    };
+  }
 }

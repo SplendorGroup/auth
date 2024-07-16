@@ -27,7 +27,7 @@ export class CreatePermissionUseCase {
       return (await this.permissionService.create(permission)) as Permission;
     } catch {
       throw new RpcException({
-        code: 1302,
+        code: 1402,
         details: JSON.stringify({
           name: 'Permission Creation Failed',
           identify: 'PERMISSION_CREATION_FAILED',
@@ -45,7 +45,7 @@ export class CreatePermissionUseCase {
   checkIfThePermissionExists(permission: Partial<Permission>) {
     if (permission) {
       throw new RpcException({
-        code: 1301,
+        code: 1401,
         details: JSON.stringify({
           name: 'Permission Already Exists',
           identify: 'PERMISSION_ALREADY_EXISTS',

@@ -19,7 +19,7 @@ export class UserRoleService {
     return await this.user_role.findOne(user_role);
   }
 
-  async create(user_role: UserRole): Promise<Partial<UserRole>> {
+  async create(user_role: Partial<UserRole>): Promise<Partial<UserRole>> {
     return await this.user_role.create(user_role);
   }
 
